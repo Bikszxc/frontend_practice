@@ -243,6 +243,13 @@ class HackerTodo {
         this.animateStatUpdate(this.totalTasks, total);
         this.animateStatUpdate(this.completedTasks, completed);
         this.animateStatUpdate(this.pendingTasks, pending);
+
+        const scroller = document.getElementById('task-scroller');
+        if (total >= 6) {
+            scroller.classList.add('pr-2')
+        } else {
+            scroller.classList.remove('pr-2')
+        }
     }
 
     animateStatUpdate(element, newValue) {
@@ -267,10 +274,8 @@ class HackerTodo {
 
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById("main-content");
-    console.log("Container found:", container); // Debug line
     if (container) {
         container.classList.add('puff-in-center');
-        console.log("Class added!"); // Debug line
     } else {
         console.log("Container not found!");
     }
