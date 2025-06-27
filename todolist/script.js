@@ -265,4 +265,15 @@ class HackerTodo {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById("main-content");
+    console.log("Container found:", container); // Debug line
+    if (container) {
+        container.classList.add('puff-in-center');
+        console.log("Class added!"); // Debug line
+    } else {
+        console.log("Container not found!");
+    }
+});
+
 const todoApp = new HackerTodo();
