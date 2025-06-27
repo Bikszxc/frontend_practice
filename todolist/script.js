@@ -155,7 +155,8 @@ class HackerTodo {
     }
 
     clearCompletedTasks() {
-        if (this.tasks.filter(task => task.completed).length === 0) return;
+        const CompletedTasks = this.tasks.filter(task => task.completed)
+        if (CompletedTasks.length === 0) return;
 
         if (confirm('Are you sure you want to clear all completed tasks?')) {
             const taskElements = document.querySelectorAll('.task-item');
@@ -163,16 +164,17 @@ class HackerTodo {
                 setTimeout(() => {
                     if (element.classList.contains('task-completed')) {
                         element.classList.add('removing');
-                        this.tasks.splice(index, 1);
                     }
                 }, index * 50);
             });
 
             setTimeout(() => {
+                this.tasks = this.tasks.filter(task => !task.completed);
                 this.saveToStorage();
+                this.renderTasks()
                 this.updateStats();
                 this.updateEmptyState();
-            }, taskElements.length * 50 + 300);
+            }, CompletedTasks.length * 50 + 300);
         }
     }
 
@@ -218,7 +220,7 @@ class HackerTodo {
                 ${task.completed ? 'checked' : ''}
                 onchange="todoApp.toggleTask(${task.id})"
             >
-            <span class="flex-1 text-gray-100 ${task.completed ? 'line-through' : ''}">
+            <span class="flex-1 text-gray-100 w-16 block break-words ${task.completed ? 'line-through' : ''}">
                 ${this.escapeHtml(task.text)}
             </span>
             <span class="text-xs text-gray-500">[${timestamp}]</span>
