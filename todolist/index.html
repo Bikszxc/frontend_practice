@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDL.exe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-900 min-h-screen font-mono">
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-green-400 mb-2 glitch-effect">
+            &gt; TODOLIST.exe
+        </h1>
+        <div class="text-gray-400 text-sm">
+            <span class="blinking-cursor">█</span> SYSTEM READY
+        </div>
+    </div>
+
+    <!-- Input Section -->
+    <div class="mb-8">
+        <div class="flex gap-2">
+            <input
+                    type="text"
+                    id="taskInput"
+                    placeholder="$ enter new task..."
+                    class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-green-400 focus:ring-1 focus:ring-green-400 transition-all duration-200"
+            >
+            <button
+                    id="addBtn"
+                    class="bg-green-600 hover:bg-green-500 text-black font-bold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
+            >
+                [ADD]
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-4 mb-6">
+        <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 text-center">
+            <div class="text-2xl font-bold text-blue-400" id="totalTasks">0</div>
+            <div class="text-xs text-gray-400">TOTAL</div>
+        </div>
+        <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 text-center">
+            <div class="text-2xl font-bold text-yellow-400" id="pendingTasks">0</div>
+            <div class="text-xs text-gray-400">PENDING</div>
+        </div>
+        <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 text-center">
+            <div class="text-2xl font-bold text-green-400" id="completedTasks">0</div>
+            <div class="text-xs text-gray-400">COMPLETE</div>
+        </div>
+    </div>
+
+    <!-- Tasks List -->
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-green-400">&gt; TASK_LIST</h2>
+            <div class="flex justify-end space-x-4">
+                <button id="clearCompletedBtn" class="text-green-600 hover:text-red-300 text-sm transition-colors">
+                    [CLEAR_COMPLETED]
+                </button>
+                <button id="clearBtn" class="text-red-400 hover:text-red-300 text-sm transition-colors">
+                    [CLEAR_ALL]
+                </button>
+            </div>
+        </div>
+        <ul id="taskList" class="space-y-2">
+            <!-- Tasks will be dynamically added here -->
+        </ul>
+        <div id="emptyState" class="text-center py-8 text-gray-500">
+            <div class="text-2xl mb-2">[ EMPTY ]</div>
+            <div class="text-sm">No tasks found. Add one above.</div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
