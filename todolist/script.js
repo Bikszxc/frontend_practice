@@ -135,6 +135,7 @@ class HackerTodo {
         const oldElement = document.querySelector(`[data-task-id="${id}"]`);
         if (oldElement) {
             oldElement.classList.add('removing');
+            oldElement.getElementsByTagName('input')[0].disabled = true;
 
             setTimeout(() => {
                 oldElement.remove();

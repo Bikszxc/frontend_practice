@@ -91,7 +91,7 @@
         transform: translateX(-20px);
     }
     to {
-        opacity: 1;
+        opacity: 0.6;
         transform: translateX(0);
     }
 }
@@ -114,7 +114,15 @@
 .task-completed {
     opacity: 0.6;
     text-decoration: line-through;
+    transition: fade 0.5s ease-out;
 }
+
+@keyframes fade {
+    to {
+        opacity: 0.6;
+    }
+}
+
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
