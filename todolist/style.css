@@ -51,16 +51,38 @@
     51%, 100% { opacity: 0; }
 }
 
-/* Task item animations - removed automatic slideIn on all tasks */
 .task-item {
-    transition: all 0.3s ease;
-    opacity: 1;
-    transform: translateX(0);
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out;
 }
 
-/* Only apply slideIn to newly added tasks */
 .task-item.new-task {
-    animation: slideIn 0.3s ease;
+    animation: slideIn 0.3s ease forwards;
+}
+
+.preparing-insert {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: none;
+}
+
+.new-task-top {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateX(-20px);
+}
+
+.new-task-growing {
+    max-height: 200px;
+    padding: 0.75rem;
+    margin-bottom: 8px;
+    opacity: 1;
+    transform: translateX(0);
+    transition: all 0.3s ease-out;
 }
 
 @keyframes slideIn {

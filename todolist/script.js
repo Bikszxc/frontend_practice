@@ -10,7 +10,6 @@ class HackerTodo {
         this.clearCompletedBtn = document.getElementById('clearCompletedBtn');
         this.emptyState = document.getElementById('emptyState');
 
-        // Stats elements
         this.totalTasks = document.getElementById('totalTasks');
         this.pendingTasks = document.getElementById('pendingTasks');
         this.completedTasks = document.getElementById('completedTasks');
@@ -34,6 +33,44 @@ class HackerTodo {
         const taskText = this.taskInput.value.trim();
         if (!taskText) return;
 
+        const inputRect = this.taskInput.getBoundingClientRect();
+        const inputStyles = window.getComputedStyle(this.taskInput);
+
+        const originalPlaceholder = this.taskInput.placeholder;
+        this.taskInput.placeholder = '';
+
+        const textElement = document.createElement('div');
+        textElement.textContent = taskText;
+        textElement.className = 'fixed pointer-events-none z-50 text-gray-100 whitespace-nowrap transition-all duration-700 ease-out';
+        textElement.style.left = `${inputRect.left + parseInt(inputStyles.paddingLeft)}px`;
+        textElement.style.top = `${inputRect.top + parseInt(inputStyles.paddingTop)}px`;
+
+        const placeholderElement = document.createElement('div');
+        placeholderElement.textContent = originalPlaceholder;
+        placeholderElement.className = 'fixed pointer-events-none z-50 text-gray-500 whitespace-nowrap transition-all duration-900 ease-in opacity-0';
+        placeholderElement.style.left = `${inputRect.left + parseInt(inputStyles.paddingLeft) + 1}px`;
+        placeholderElement.style.top = `${inputRect.top + parseInt(inputStyles.paddingTop) + 1}px`;
+
+        document.body.appendChild(textElement);
+        document.body.appendChild(placeholderElement);
+
+        this.taskInput.value = '';
+
+        requestAnimationFrame(() => {
+            textElement.classList.add('translate-x-48', 'opacity-0');
+
+            setTimeout(() => {
+                placeholderElement.classList.remove('opacity-0');
+                placeholderElement.classList.add('opacity-100');
+            }, 100);
+        });
+
+        setTimeout(() => {
+            document.body.removeChild(textElement);
+            document.body.removeChild(placeholderElement);
+            this.taskInput.placeholder = originalPlaceholder;
+        }, 1000);
+
         const task = {
             id: ++this.taskIdCounter,
             text: taskText,
@@ -42,7 +79,6 @@ class HackerTodo {
         };
 
         this.tasks.unshift(task);
-        this.taskInput.value = '';
         this.saveToStorage();
 
         this.addNewTaskElement(task);
@@ -57,30 +93,19 @@ class HackerTodo {
 
     addNewTaskElement(task) {
         const taskElement = this.createTaskElement(task);
-        taskElement.classList.add('new-task');
 
+        taskElement.classList.add('new-task-top');
         this.taskList.insertBefore(taskElement, this.taskList.firstChild);
 
-        setTimeout(() => {
-            taskElement.classList.remove('new-task');
-        }, 300);
-    }
+        taskElement.offsetHeight;
 
-    insertSortedTaskElement(task) {
-        const taskElement = this.createTaskElement(task);
-        taskElement.classList.add('new-task');
-
-        if (task.completed) {
-            this.taskList.appendChild(taskElement); // to bottom
-        } else {
-            this.taskList.insertBefore(taskElement, this.taskList.firstChild); // to top
-        }
+        taskElement.classList.remove('new-task-top');
+        taskElement.classList.add('new-task-growing');
 
         setTimeout(() => {
-            taskElement.classList.remove('new-task');
+            taskElement.classList.remove('new-task', 'new-task-growing');
         }, 300);
     }
-
 
     removeTask(id) {
         const taskElement = document.querySelector(`[data-task-id="${id}"]`);
@@ -103,6 +128,7 @@ class HackerTodo {
         if (!task) return;
 
         task.completed = !task.completed;
+        task.timestamp = new Date().toISOString() // change task time on toggle
 
         this.saveToStorage();
 
@@ -115,20 +141,41 @@ class HackerTodo {
 
                 // Update task order in array
                 this.tasks = this.tasks.filter(t => t.id !== id);
+
                 if (task.completed) {
                     this.tasks.push(task);
                 } else {
                     this.tasks.unshift(task);
                 }
 
-                task.timestamp = new Date().toISOString() // change task time on toggle
-
                 this.saveToStorage();
 
-                this.insertSortedTaskElement(task);
+                const taskElement = this.createTaskElement(task);
+
+                if (task.completed) {
+                    taskElement.classList.add('preparing-insert');
+                    this.taskList.appendChild(taskElement);
+
+                    taskElement.offsetHeight;
+
+                    taskElement.classList.remove('preparing-insert');
+                    taskElement.classList.add('new-task');
+                } else {
+                    taskElement.classList.add('new-task-top');
+                    this.taskList.insertBefore(taskElement, this.taskList.firstChild);
+
+                    taskElement.offsetHeight;
+
+                    taskElement.classList.remove('new-task-top');
+                    taskElement.classList.add('new-task-growing');
+                }
+
+                setTimeout(() => {
+                    taskElement.classList.remove('new-task', 'new-task-growing');
+                }, 300);
 
                 this.updateStats();
-            }, 200);
+            }, 300);
         }
     }
 
@@ -198,6 +245,7 @@ class HackerTodo {
         if (this.tasks.length === 0) {
             this.emptyState.style.display = 'block';
         } else {
+            this.emptyState.classList.add('puff-in-center');
             this.emptyState.style.display = 'none';
         }
     }
