@@ -104,7 +104,7 @@ class HackerTodo {
 
         setTimeout(() => {
             taskElement.classList.remove('new-task', 'new-task-growing');
-        }, 300);
+        }, 500);
     }
 
     removeTask(id) {
@@ -172,7 +172,7 @@ class HackerTodo {
 
                 setTimeout(() => {
                     taskElement.classList.remove('new-task', 'new-task-growing');
-                }, 300);
+                }, 500);
 
                 this.updateStats();
             }, 300);
