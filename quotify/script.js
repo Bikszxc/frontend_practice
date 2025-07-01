@@ -10,6 +10,9 @@ class QuotifyApp {
         this.quoteText = document.getElementById("quote-text");
         this.quoteAuthor = document.getElementById("quote-author");
 
+        this.shareText = document.getElementById("shareText");
+        this.shareAuthor = document.getElementById("shareAuthor");
+
         this.init()
     }
 
@@ -40,23 +43,42 @@ class QuotifyApp {
     }
 
     async refreshQuote() {
+        this.refreshBtn.classList.add("refreshed");
+        this.refreshBtn.disabled = true;
+
         this.quoteData = await this.getQuote();
+
+        setTimeout(() => {
+            this.refreshBtn.classList.remove("refreshed");
+            this.refreshBtn.disabled = false;
+        }, 1000);
 
         this.quote = this.quoteData.text;
         this.author = this.quoteData.author;
 
         this.quoteText.innerHTML = this.quote;
         this.quoteAuthor.innerHTML = "- " + this.author;
+
+        this.shareText.innerHTML = this.quote;
+        this.shareAuthor.innerHTML = "- " + this.author;
+
     }
 
     saveQuote() {
         if (!this.savedQuotes.some(quote => quote.id === this.quoteData.id)) {
             this.savedQuotes.unshift(this.quoteData);
         } else {
-            alert("This quote is already saved!")
+            alert("This quote is already saved!");
+            return;
         }
 
-        this.saveToStorage()
+        this.saveBtn.classList.add("liked")
+
+        setTimeout(() => {
+            this.saveBtn.classList.remove("liked")
+        }, 300)
+
+        this.saveToStorage();
     }
 
     viewSavedQuotes() {
